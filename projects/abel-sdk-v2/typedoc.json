@@ -1,0 +1,13 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "name": "abel-sdk",
+  "customFooterHtml": "Copyright <strong>d13</strong> 2025",
+  "hideGenerator": true,
+  "excludeInternal": true,
+  "requiredToBeDocumented": ["Function", "Class", "Interface", "Module"],
+  "githubPages": false,
+  "router": "structure-dir",
+  "entryPoints": [
+    "./src/index.ts"
+  ]
+}

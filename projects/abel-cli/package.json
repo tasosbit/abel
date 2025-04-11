@@ -9,7 +9,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "abel-sdk": "=0.1.0",
     "dotenv": "^16.4.7",
