@@ -21,5 +21,6 @@
     "noEmit": true
   },
   "include": ["smart_contracts/**/*.ts"],
-  "exclude": ["node_modules", "dist", "coverage"]
+  "exclude": ["node_modules", "dist", "coverage"],
+  "references": [{"path": "./tsconfig.test.json"}]
 }

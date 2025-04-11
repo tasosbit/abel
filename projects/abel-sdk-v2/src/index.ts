@@ -4,27 +4,31 @@ import { BoxName } from "@algorandfoundation/algokit-utils/types/app";
 import { decodeAddress, decodeUint64, encodeAddress, encodeUint64, makeEmptyTransactionSigner } from "algosdk";
 import pMap from "p-map";
 import {
-  AssetFull,
   AssetFullFromTuple,
   AssetLabelingClient,
   AssetLabelingFactory,
-  AssetMicro,
   AssetMicroFromTuple,
-  AssetMicroLabels,
   AssetMicroLabelsFromTuple,
-  AssetSmall,
   AssetSmallFromTuple,
-  AssetText,
   AssetTextFromTuple,
-  AssetTextLabels,
   AssetTextLabelsFromTuple,
-  AssetTiny,
   AssetTinyFromTuple,
-  AssetTinyLabels,
   AssetTinyLabelsFromTuple,
   LabelDescriptorFromTuple as LabelDescriptorBoxValueFromTuple,
 } from "./generated/abel-contract-client.js";
-import { AnyFn, FirstArgument, LabelDescriptor, QueryReturn } from "./types.js";
+import {
+  AnyFn,
+  AssetFull,
+  AssetMicro,
+  AssetMicroLabels,
+  AssetSmall,
+  AssetText,
+  AssetTextLabels,
+  AssetTiny,
+  AssetTinyLabels,
+  LabelDescriptor,
+  QueryReturn,
+} from "./types.js";
 import { chunk, encodeUint64Arr, isNullish, mergeMapsArr, wrapErrors } from "./util.js";
 
 export * from "./types.js";
@@ -492,10 +496,12 @@ export class AbelSDK {
   parseLogsAs<T extends AnyFn>(logs: Uint8Array[], tupleParser: T, abiDecodingMethodName: string): ReturnType<T>[] {
     const decodingMethod = this.readClient.appClient.getABIMethod(abiDecodingMethodName);
     const parsed = logs.map((logValue) =>
-      tupleParser(
-        // @ts-ignore TODO fixable?
-        decodingMethod.returns.type.decode(logValue)
-      )
+      logValue.length
+        ? tupleParser(
+            // @ts-ignore TODO fixable?
+            decodingMethod.returns.type.decode(logValue)
+          )
+        : { deleted: true }
     );
     return parsed;
   }

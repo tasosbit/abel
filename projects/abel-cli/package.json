@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "abel-sdk": "=0.1.0",
+    "abel-sdk": "../abel-sdk-v2",
     "dotenv": "^16.4.7",
     "p-map": "^7.0.3",
     "zod": "^3.24.2"

@@ -54,6 +54,12 @@ def b2str(b: Bytes) -> arc4.String:
     return arc4.String(String.from_bytes(b))
 
 
+@subroutine
+def asset_is_deleted(asset_id: UInt64) -> bool:
+    _v, exists = op.AssetParamsGet.asset_creator(asset_id)
+    return not exists
+
+
 class AssetLabeling(ARC4Contract):
     def __init__(self) -> None:
         self.admin = Txn.sender
@@ -245,6 +251,7 @@ class AssetLabeling(ARC4Contract):
 
     @subroutine
     def _add_label_to_asset(self, label: String, asset: Asset) -> None:
+        ensure(not asset_is_deleted(asset.id), S("ERR:NOEXIST"))
         ensure(label in self.labels, S("ERR:NOEXIST"))
         if asset in self.assets:
             # existing operator, check for duplicate
@@ -359,6 +366,8 @@ class AssetLabeling(ARC4Contract):
 
     @subroutine
     def _get_asset_micro(self, asset_id: UInt64) -> AssetMicro:
+        if asset_is_deleted(asset_id):
+            return AssetMicro.from_bytes(b"")
         asset = Asset(asset_id)
         return AssetMicro(
             unit_name=b2str(asset.unit_name),
@@ -378,6 +387,8 @@ class AssetLabeling(ARC4Contract):
 
     @subroutine
     def _get_asset_micro_labels(self, asset_id: UInt64) -> AssetMicroLabels:
+        if asset_is_deleted(asset_id):
+            return AssetMicroLabels.from_bytes(b"")
         asset = Asset(asset_id)
         return AssetMicroLabels(
             unit_name=b2str(asset.unit_name),
@@ -398,6 +409,8 @@ class AssetLabeling(ARC4Contract):
 
     @subroutine
     def _get_asset_tiny(self, asset_id: UInt64) -> AssetTiny:
+        if asset_is_deleted(asset_id):
+            return AssetTiny.from_bytes(b"")
         asset = Asset(asset_id)
         return AssetTiny(
             name=b2str(asset.name),
@@ -418,6 +431,8 @@ class AssetLabeling(ARC4Contract):
 
     @subroutine
     def _get_asset_tiny_labels(self, asset_id: UInt64) -> AssetTinyLabels:
+        if asset_is_deleted(asset_id):
+            return AssetTinyLabels.from_bytes(b"")
         asset = Asset(asset_id)
         return AssetTinyLabels(
             name=b2str(asset.name),
@@ -439,6 +454,8 @@ class AssetLabeling(ARC4Contract):
 
     @subroutine
     def _get_asset_text(self, asset_id: UInt64) -> AssetText:
+        if asset_is_deleted(asset_id):
+            return AssetText.from_bytes(b"")
         asset = Asset(asset_id)
         return AssetText(
             name=b2str(asset.name),
@@ -459,6 +476,8 @@ class AssetLabeling(ARC4Contract):
 
     @subroutine
     def _get_asset_text_labels(self, asset_id: UInt64) -> AssetTextLabels:
+        if asset_is_deleted(asset_id):
+            return AssetTextLabels.from_bytes(b"")
         asset = Asset(asset_id)
         return AssetTextLabels(
             name=b2str(asset.name),
@@ -480,6 +499,8 @@ class AssetLabeling(ARC4Contract):
 
     @subroutine
     def _get_asset_small(self, asset_id: UInt64) -> AssetSmall:
+        if asset_is_deleted(asset_id):
+            return AssetSmall.from_bytes(b"")
         asset = Asset(asset_id)
         return AssetSmall(
             name=b2str(asset.name),
@@ -504,6 +525,8 @@ class AssetLabeling(ARC4Contract):
 
     @subroutine
     def _get_asset_full(self, asset_id: UInt64) -> AssetFull:
+        if asset_is_deleted(asset_id):
+            return AssetFull.from_bytes(b"")
         asset = Asset(asset_id)
         reserve_acct = Account(asset.reserve.bytes)
         reserve_balance = (

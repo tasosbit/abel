@@ -699,4 +699,42 @@ describe('asset labeling contract', () => {
 
     await expect(() => removeLabelFromAsset(operatorClient, assetId, label2)).rejects.toThrow(/ERR:NOEXIST/)
   })
+
+  test('add label to deleted asset should fail', async () => {
+    const { testAccount: adminAccount, algorand } = localnet.context
+
+    const {assetId} = await algorand.send.assetCreate({
+      sender: adminAccount.addr,
+      total: 1000000n, // Total units of the asset
+      decimals: 0, // Number of decimals for the asset
+      defaultFrozen: false, // Whether the asset is frozen by default
+      manager: adminAccount.addr, // Address for the asset manager
+      reserve: adminAccount.addr, // Address for storing reserve assets
+      freeze: adminAccount.addr, // Address with freezing capabilities
+      clawback: adminAccount.addr, // Address with clawback rights
+      unitName: 'UNIT', // Unit name of the asset
+      assetName: 'TestAsset', // Asset name
+    })
+    await algorand.send.assetDestroy({
+      sender: adminAccount.addr,
+      assetId
+    })
+
+
+    const { adminClient } = await deploy(adminAccount)
+    const label = 'wo'
+    const labelName = 'world'
+    const labelUrl = 'http://'
+
+
+    await addLabel(adminClient, adminAccount, label, labelName, labelUrl)
+    const operator = await localnet.context.generateAccount({ initialFunds: (0.2).algos() })
+    await addOperatorToLabel(adminClient, operator, label)
+    const operatorClient = adminClient.clone({
+      defaultSender: operator,
+      defaultSigner: operator.signer,
+    })
+    // This should throw
+    await expect(()=>addLabelToAsset(operatorClient, assetId, label)).rejects.toThrow(/ERR:NOEXIST/)
+  })
 })

@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": ["tests/**/*.ts", "smart_contracts/artifacts/**/*.ts"]
+}
