@@ -28,17 +28,19 @@
   "scripts": {
     "clean": "rm -rf dist/ artifacts/ src/generated/",
     "prebuild": "npm run clean && scripts/update-artifacts.sh",
+    "docs": "typedoc",
     "build": "tsc",
     "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@algorandfoundation/algokit-client-generator": "^4.0.9",
     "@types/node": "^22.13.17",
     "buffer": "^6.0.3",
-    "tsx": "^4.19.3"
+    "tsx": "^4.19.3",
+    "typedoc": "^0.28.2"
   },
   "peerDependencies": {
     "@algorandfoundation/algokit-utils": "^7.0.2",

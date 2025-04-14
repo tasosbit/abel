@@ -47,12 +47,12 @@ console.log({
 });
 
 if (toAdd.length) {
-  console.log(`Adding (${toAdd.length})`);
+  console.log(`Adding (${toAdd.length})`, ...toAdd);
   await abel.addLabelToAssets(toAdd, LABEL_ID);
 }
 
 if (toRemove.length) {
-  console.log(`Removing (${toRemove.length})`);
+  console.log(`Removing (${toRemove.length})`, ...toRemove);
   await pMap(toRemove, (id) => abel.removeLabelFromAsset(id, LABEL_ID), { concurrency: config.CONCURRENCY });
 }
 
